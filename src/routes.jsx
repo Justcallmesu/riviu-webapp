@@ -1,14 +1,10 @@
+import { SignIn, SignUp } from "@/pages/auth";
+import { Home } from "@/pages/dashboard";
 import {
-  HomeIcon,
-  UserCircleIcon,
-  TableCellsIcon,
-  BellIcon,
   ArrowRightOnRectangleIcon,
+  HomeIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
-import { SignIn, SignUp } from "@/pages/auth";
-import NotFound from "./pages/NotFound";
 import MoviePage from "./pages/moviePage";
 import AddMovie from "./widgets/addMovie";
 

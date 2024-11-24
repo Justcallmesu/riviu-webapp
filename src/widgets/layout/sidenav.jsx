@@ -1,5 +1,4 @@
-import PropTypes from "prop-types";
-import { Link, NavLink } from "react-router-dom";
+import { setOpenSidenav, useMaterialTailwindController } from "@/context";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
   Avatar,
@@ -7,7 +6,8 @@ import {
   IconButton,
   Typography,
 } from "@material-tailwind/react";
-import { useMaterialTailwindController, setOpenSidenav } from "@/context";
+import PropTypes from "prop-types";
+import { Link, NavLink } from "react-router-dom";
 
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -65,7 +65,10 @@ export function Sidenav({ brandImg, brandName, routes }) {
             )}
             {pages.map(({ icon, name, path }) => (
               <li key={name}>
-                <NavLink to={`/${layout}${path}`}>
+                <NavLink
+                  to={`/${layout}${path}`}
+                  className={path === "/moviePage" && "hidden"}
+                >
                   {({ isActive }) => (
                     <Button
                       variant={isActive ? "gradient" : "text"}
