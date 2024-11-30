@@ -1,6 +1,6 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios from "axios";
 
-const MainAxiosRequestConfig: AxiosRequestConfig = {
+const MainAxiosRequestConfig = {
   baseURL: "http://localhost:3000/api/v1",
   responseType: "json",
   headers: {
@@ -10,6 +10,6 @@ const MainAxiosRequestConfig: AxiosRequestConfig = {
   withCredentials: true,
 };
 
-const api: AxiosInstance = axios.create(MainAxiosRequestConfig);
+const api = axios.create(MainAxiosRequestConfig);
 
 export default api;

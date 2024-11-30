@@ -1,13 +1,8 @@
 import api from "@/instances/axios";
-import { UseGetAxiosProps } from "@/models/globals/AxiosProps";
-import {
-  UseQueryResult,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-function useGetAxios<T>(props: UseGetAxiosProps) {
+function useGetAxios(props) {
   const {
     config,
     queryKey,
@@ -28,7 +23,7 @@ function useGetAxios<T>(props: UseGetAxiosProps) {
     return response.data;
   };
 
-  const result: UseQueryResult<T> = useQuery({
+  const result = useQuery({
     queryKey,
     queryFn: axiosGet,
     enabled,

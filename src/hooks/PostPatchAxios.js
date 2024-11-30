@@ -1,13 +1,13 @@
 import api from "@/instances/axios";
-import { DeleteDto, UseAxiosDeleteProps } from "@/models/globals/AxiosProps";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-export function useAxiosDelete(props: UseAxiosDeleteProps) {
+export function useAxiosPostPatch(props) {
   const {
     config,
     invalidateQueryKey,
     invalidateType,
+    onSuccess,
     queryParams,
     removeQueryKey,
     removeType,
@@ -17,7 +17,7 @@ export function useAxiosDelete(props: UseAxiosDeleteProps) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const axiosDelete = async ({ id, id2 }: DeleteDto) => {
+  const axiosPostPatch = async ({ data, id, id2 }) => {
     let finalConfig = config();
 
     if (id) finalConfig = config(id);
@@ -25,32 +25,36 @@ export function useAxiosDelete(props: UseAxiosDeleteProps) {
 
     const response = await api({
       ...finalConfig,
+      data,
       params: queryParams,
     });
 
     return response.data;
   };
 
-  const onSuccessHandler = () => {
-    if (removeQueryKey) {
+  const successFunction = async (data) => {
+    if (removeQueryKey)
       queryClient.removeQueries({ queryKey: removeQueryKey, type: removeType });
-    }
 
-    if (invalidateQueryKey) {
+    if (invalidateQueryKey)
       queryClient.invalidateQueries({
         queryKey: invalidateQueryKey,
         type: invalidateType,
       });
-    }
+
+    onSuccess?.();
 
     if (redirect) navigate(redirect);
   };
 
   const mutation = useMutation({
-    mutationFn: ({ id2, id }: DeleteDto) => {
-      return axiosDelete({ id, id2 });
+    mutationFn: ({ data, id, id2 }) => {
+      return axiosPostPatch({ data, id, id2 });
     },
-    onSuccess: onSuccessHandler,
+    onSuccess: (data) => successFunction(data),
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   return { ...mutation };

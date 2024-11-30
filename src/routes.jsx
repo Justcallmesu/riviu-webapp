@@ -21,6 +21,7 @@ export const routes = [
         name: "dashboard",
         path: "/home",
         element: <Home />,
+        isVisible: true,
       },
       {
         icon: (
@@ -40,8 +41,9 @@ export const routes = [
           </svg>
         ),
         name: "Movie Page",
-        path: "/moviePage",
+        path: "/moviePage/:id",
         element: <MoviePage />,
+        isVisible: false,
       },
       {
         icon: (
@@ -61,6 +63,7 @@ export const routes = [
           </svg>
         ),
         name: "Add Movie",
+        isVisible: true,
         path: "/add-movie",
         element: <AddMovie />,
       },
@@ -73,11 +76,13 @@ export const routes = [
         icon: <ArrowRightOnRectangleIcon {...icon} />,
         name: "sign in",
         path: "/sign-in",
+        isVisible: true,
         element: <SignIn />,
       },
       {
         icon: <UserPlusIcon {...icon} />,
         name: "sign up",
+        isVisible: true,
         path: "/sign-up",
         element: <SignUp />,
       },

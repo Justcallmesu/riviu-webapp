@@ -1,21 +1,12 @@
 import api from "@/instances/axios";
-import {
-  PostPatchDto,
-  UseAxiosPostPatchProps,
-} from "@/models/globals/AxiosProps";
-import { ResponseData } from "@/models/globals/Response";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
-export function useAxiosPostPatch<T extends any>(
-  props: UseAxiosPostPatchProps<T>
-) {
+export function useAxiosDelete(props) {
   const {
     config,
     invalidateQueryKey,
     invalidateType,
-    onSuccess,
     queryParams,
     removeQueryKey,
     removeType,
@@ -25,42 +16,40 @@ export function useAxiosPostPatch<T extends any>(
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const axiosPostPatch = async ({ data, id, id2 }: PostPatchDto<T>) => {
+  const axiosDelete = async ({ id, id2 }) => {
     let finalConfig = config();
 
     if (id) finalConfig = config(id);
     if (id2) finalConfig = config(id, id2);
 
-    const response = await api<T>({
+    const response = await api({
       ...finalConfig,
-      data,
       params: queryParams,
     });
 
     return response.data;
   };
 
-  const successFunction = async (data: ResponseData<T>) => {
-    if (removeQueryKey)
+  const onSuccessHandler = () => {
+    if (removeQueryKey) {
       queryClient.removeQueries({ queryKey: removeQueryKey, type: removeType });
+    }
 
-    if (invalidateQueryKey)
+    if (invalidateQueryKey) {
       queryClient.invalidateQueries({
         queryKey: invalidateQueryKey,
         type: invalidateType,
       });
-
-    onSuccess?.();
+    }
 
     if (redirect) navigate(redirect);
   };
 
   const mutation = useMutation({
-    mutationFn: ({ data, id, id2 }: PostPatchDto<T>) => {
-      return axiosPostPatch({ data, id, id2 });
+    mutationFn: ({ id2, id }) => {
+      return axiosDelete({ id, id2 });
     },
-    onSuccess: (data) => successFunction(data as ResponseData<T>),
-    onError: (error: AxiosError) => {},
+    onSuccess: onSuccessHandler,
   });
 
   return { ...mutation };
