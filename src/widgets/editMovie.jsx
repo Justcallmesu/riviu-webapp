@@ -1,16 +1,19 @@
-import { axiosPostMovie } from "@/config/axios/movies/movies";
+import { axiosGetMovie, axiosPatchMovie } from "@/config/axios/movies/movies";
+import useGetAxios from "@/hooks/GetAxios";
 import { useAxiosPostPatch } from "@/hooks/PostPatchAxios";
 import { movieQueryKeys } from "@/queryKeys/movies";
 import { GetUser } from "@/utils/LocalStorage";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Rating from "./Rating";
 
-function AddMovie() {
+function EditMovie() {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
   const [rating, setRating] = useState(1);
+
+  const { id } = useParams();
 
   const [name, setname] = useState();
   const [releaseDate, setreleaseDate] = useState();
@@ -18,8 +21,13 @@ function AddMovie() {
   const [reviewAuthor, setreviewAuthor] = useState();
   const [youtubeLink, setyoutubeLink] = useState();
 
-  const { mutate: mutateCreateMovie } = useAxiosPostPatch({
-    config: () => axiosPostMovie(),
+  const { data: movieData } = useGetAxios({
+    config: axiosGetMovie(id),
+    queryKey: movieQueryKeys.byId(id).queryKey,
+  });
+
+  const { mutate: mutateUpdateMovie } = useAxiosPostPatch({
+    config: () => axiosPatchMovie(id),
     redirect: "/dashboard/home",
     invalidateQueryKey: movieQueryKeys._def,
     invalidateType: "all",
@@ -71,14 +79,7 @@ function AddMovie() {
   };
 
   const handleFormSubmit = () => {
-    if (
-      !name ||
-      !releaseDate ||
-      !synopsis ||
-      !reviewAuthor ||
-      !selectedFile ||
-      !youtubeLink
-    ) {
+    if (!name || !releaseDate || !synopsis || !reviewAuthor || !youtubeLink) {
       return alert("Mohon isi semua field");
     }
 
@@ -99,12 +100,23 @@ function AddMovie() {
       })
     );
 
-    mutateCreateMovie({
+    mutateUpdateMovie({
       data: formData,
     });
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (movieData) {
+      setRating(movieData.data.rating);
+      setname(movieData.data.name);
+      setreleaseDate(new Date(movieData.data.releaseDate));
+      setreviewAuthor(movieData.data.authorReview);
+      setsynopsis(movieData.data.synopsis);
+      setyoutubeLink(movieData.data.youtubeLink);
+    }
+  }, [movieData]);
 
   useEffect(() => {
     if (!GetUser()) {
@@ -231,4 +243,4 @@ function AddMovie() {
   );
 }
 
-export default AddMovie;
+export default EditMovie;

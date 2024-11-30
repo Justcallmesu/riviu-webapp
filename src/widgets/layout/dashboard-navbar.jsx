@@ -1,30 +1,24 @@
-import { useLocation, Link } from "react-router-dom";
+import { logout } from "@/auth/Auth";
+import { setOpenSidenav, useMaterialTailwindController } from "@/context";
+import { GetUser } from "@/utils/LocalStorage";
 import {
-  Navbar,
-  Typography,
-  Button,
-  IconButton,
-  Breadcrumbs,
-  Input,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Avatar,
-} from "@material-tailwind/react";
-import {
-  UserCircleIcon,
-  Cog6ToothIcon,
-  BellIcon,
+  Bars3Icon,
   ClockIcon,
   CreditCardIcon,
-  Bars3Icon,
+  UserCircleIcon,
 } from "@heroicons/react/24/solid";
 import {
-  useMaterialTailwindController,
-  setOpenConfigurator,
-  setOpenSidenav,
-} from "@/context";
+  Avatar,
+  Breadcrumbs,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  MenuList,
+  Navbar,
+  Typography,
+} from "@material-tailwind/react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -33,7 +27,15 @@ export function DashboardNavbar() {
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
   const isBuy = localStorage.getItem("isBuy");
   const dateBuy = localStorage.getItem("dateBuy");
-  console.log(isBuy);
+
+  const user = GetUser();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+
+    navigate(0);
+  };
 
   return (
     <Navbar
@@ -53,15 +55,6 @@ export function DashboardNavbar() {
               fixedNavbar ? "mt-1" : ""
             }`}
           >
-            <Link to={`/${layout}`}>
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100"
-              >
-                {layout}
-              </Typography>
-            </Link>
             <Typography
               variant="small"
               color="blue-gray"
@@ -83,23 +76,52 @@ export function DashboardNavbar() {
           >
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
-          <Link to="/ /sign-in">
-            <Button
-              variant="text"
-              color="blue-gray"
-              className="hidden items-center gap-1 px-4 xl:flex"
-            >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-              Sign In
-            </Button>
-            <IconButton
-              variant="text"
-              color="blue-gray"
-              className="grid xl:hidden"
-            >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-            </IconButton>
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-3 text-black">
+              <div className="flex items-center gap-3 font-bold text-blue-gray-500">
+                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />{" "}
+                {user.name}
+              </div>
+              <Button
+                variant="text"
+                color="blue-gray"
+                onClick={handleLogout}
+                className="hidden items-center gap-1 px-4 xl:flex"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6ZM5.78 8.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 0 0 0 1.06l3 3a.75.75 0 0 0 1.06-1.06l-1.72-1.72H15a.75.75 0 0 0 0-1.5H4.06l1.72-1.72a.75.75 0 0 0 0-1.06Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Log out
+              </Button>
+            </div>
+          ) : (
+            <Link to="/auth/sign-in">
+              <Button
+                variant="text"
+                color="blue-gray"
+                className="hidden items-center gap-1 px-4 xl:flex"
+              >
+                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
+                Sign In
+              </Button>
+              <IconButton
+                variant="text"
+                color="blue-gray"
+                className="grid xl:hidden"
+              >
+                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
+              </IconButton>
+            </Link>
+          )}
           {/* <IconButton
             variant="text"
             color="blue-gray"

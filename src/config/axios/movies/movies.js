@@ -28,7 +28,7 @@ export function axiosPostMovie() {
 
 export function axiosPatchMovie(id) {
   return {
-    method: "PATCH",
+    method: "PUT",
     url: `/movies/${id}`,
   };
 }

@@ -1,41 +1,38 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useLoginQuery } from "@/auth/Auth";
+import { SetUser } from "@/utils/LocalStorage";
 import {
+  Button,
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
+  CardHeader,
   Input,
-  Checkbox,
-  Button,
   Typography,
 } from "@material-tailwind/react";
 import { useState } from "react";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 export function SignIn() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
 
   const navigate = useNavigate();
 
+  const { mutateAsync: queryLogin, isPending } = useLoginQuery();
+
   async function login() {
-    let formData = new FormData();
-    formData.append("email", email);
-    formData.append("pass", pass);
     let changePath = false;
 
     try {
-      const datas = await axios.post(
-        "http://localhost:8000/api/user/login",
-        formData
-      );
-      if (datas.data.message == "success") {
-        localStorage.setItem("user", datas.data.username);
-        changePath = true;
+      const res = await queryLogin({ username, password: pass });
+      if (res) {
+        SetUser(res);
       }
-      changePath ? navigate("/dashboard/home") : 0;
+      alert("Login Berhasil");
+      navigate(0);
     } catch (error) {
       console.log(error);
+      alert("Login Gagal");
     }
   }
 
@@ -59,11 +56,11 @@ export function SignIn() {
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
             <Input
-              type="email"
-              label="Email"
+              type="text"
+              label="Username"
               size="lg"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <Input
               type="password"
@@ -72,10 +69,6 @@ export function SignIn() {
               value={pass}
               onChange={(e) => setPass(e.target.value)}
             />
-
-            <div className="-ml-2.5">
-              <Checkbox label="Remember Me" />
-            </div>
           </CardBody>
           <CardFooter className="pt-0">
             <Button variant="gradient" fullWidth onClick={login}>

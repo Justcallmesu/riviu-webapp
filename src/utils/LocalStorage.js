@@ -29,3 +29,15 @@ export function SetLikedMovies(id) {
 
   localStorage.setItem("likedMovies", JSON.stringify([...likedMoviesList, id]));
 }
+
+export function SetUser(data) {
+  localStorage.setItem("user", JSON.stringify(data));
+}
+
+export function removeUser() {
+  localStorage.removeItem("user");
+}
+
+export function GetUser() {
+  return JSON.parse(localStorage.getItem("user"));
+}

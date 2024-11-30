@@ -5,8 +5,11 @@ import {
   HomeIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
+import { MyMovies } from "./pages/dashboard/myMovies";
 import MoviePage from "./pages/moviePage";
+import { GetUser } from "./utils/LocalStorage";
 import AddMovie from "./widgets/addMovie";
+import EditMovie from "./widgets/editMovie";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -18,7 +21,7 @@ export const routes = [
     pages: [
       {
         icon: <HomeIcon {...icon} />,
-        name: "dashboard",
+        name: "Home",
         path: "/home",
         element: <Home />,
         isVisible: true,
@@ -63,9 +66,35 @@ export const routes = [
           </svg>
         ),
         name: "Add Movie",
-        isVisible: true,
+        isVisible: GetUser(),
         path: "/add-movie",
         element: <AddMovie />,
+      },
+      {
+        icon: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="size-6"
+          >
+            <path
+              fillRule="evenodd"
+              d="M2.625 6.75a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0A.75.75 0 0 1 8.25 6h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75ZM2.625 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0ZM7.5 12a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12A.75.75 0 0 1 7.5 12Zm-4.875 5.25a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ),
+        name: "My Added Movies",
+        isVisible: GetUser(),
+        path: "/my-movie",
+        element: <MyMovies />,
+      },
+      {
+        name: "Edit Film",
+        isVisible: false,
+        path: "/edit/:id",
+        element: <EditMovie />,
       },
     ],
   },
@@ -76,13 +105,13 @@ export const routes = [
         icon: <ArrowRightOnRectangleIcon {...icon} />,
         name: "sign in",
         path: "/sign-in",
-        isVisible: true,
+        isVisible: !GetUser(),
         element: <SignIn />,
       },
       {
         icon: <UserPlusIcon {...icon} />,
         name: "sign up",
-        isVisible: true,
+        isVisible: !GetUser(),
         path: "/sign-up",
         element: <SignUp />,
       },

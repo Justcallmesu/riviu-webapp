@@ -21,6 +21,7 @@
     "dayjs": "^1.11.13",
     "flowbite": "^1.6.5",
     "flowbite-react": "^0.4.2",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "prop-types": "15.8.1",
     "react": "18.2.0",

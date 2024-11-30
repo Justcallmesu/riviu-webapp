@@ -1,51 +1,45 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useRegisterQuery } from "@/auth/Auth";
 import {
+  Button,
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
+  CardHeader,
   Input,
-  Checkbox,
-  Button,
   Typography,
 } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export function SignUp() {
-  const mySwal = withReactContent(Swal);
-
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
+  const [passwordConfirm, setConfirmPassword] = useState("");
 
+  const navigate = useNavigate();
+
+  const { mutateAsync: queryRegister, isPending } = useRegisterQuery();
   async function submitData() {
-    let formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("password", pass);
-    let changePath = false;
-
     try {
-      const datas = await axios.post(
-        "http://localhost:8000/api/user/store",
-        formData
-      );
-      if (datas.data.message == "success") {
-        // mySwal.fire({
-        //   title: <p>Success</p>,
-        //   html: <i>Please Login</i>,
-        //   icon: "success",
-        // });
-        changePath = true;
-        setName("");
-        setEmail("");
-        setPass("");
+      if (pass !== passwordConfirm) {
+        return alert("Password tidak sama dengan konfirmasi password!");
       }
-      changePath ? navigate("/auth/sign-in") : 0;
-    } catch (error) {}
+
+      await queryRegister({
+        name,
+        username,
+        password: pass,
+        confirmPassword: passwordConfirm,
+      });
+
+      alert("Register Berhasil");
+
+      await navigate("/auth/sign-in");
+    } catch (error) {
+      console.log(error);
+      alert("Register Gagal!");
+    }
   }
 
   return (
@@ -74,11 +68,11 @@ export function SignUp() {
               onChange={(e) => setName(e.target.value)}
             />
             <Input
-              type="email"
-              label="Email"
+              type="username"
+              label="Username"
               size="lg"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <Input
               type="password"
@@ -87,9 +81,13 @@ export function SignUp() {
               value={pass}
               onChange={(e) => setPass(e.target.value)}
             />
-            <div className="-ml-2.5">
-              <Checkbox label="I agree the Terms and Conditions" />
-            </div>
+            <Input
+              type="password"
+              label="Konfirmasi Password"
+              size="lg"
+              value={passwordConfirm}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
           </CardBody>
           <CardFooter className="pt-0">
             <Button variant="gradient" fullWidth onClick={submitData}>
