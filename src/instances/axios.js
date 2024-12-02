@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const MainAxiosRequestConfig = {
-  baseURL: "riviu-server-production.up.railway.app/api/v1",
+  baseURL: "https://riviu-server-production.up.railway.app/api/v1",
   responseType: "json",
   headers: {
     "Access-Control-Allow-Origin": "*",
