@@ -1,4 +1,5 @@
 import { IconArrowForward } from "@tabler/icons-react";
+import { Pagination } from "flowbite-react";
 import { debounce } from "lodash";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -22,9 +23,17 @@ export function Home() {
   const handleMoviesSearch = debounce((value) => {
     setMoviesQuery((prev) => ({
       ...prev,
+      page: 1,
       search: value,
     }));
   }, 500);
+
+  const handlePageSize = (data) => {
+    setMoviesQuery((prev) => ({
+      ...prev,
+      page: data,
+    }));
+  };
 
   return (
     <div className="mt-12">
@@ -33,7 +42,7 @@ export function Home() {
         className="w-full p-5"
         onChange={(e) => handleMoviesSearch(e.target.value)}
       />
-      <div className="pt-5">
+      <div className="w-full pt-5">
         {isMovieFetching ? (
           <div role="status" className="flex w-full justify-center">
             <svg
@@ -141,6 +150,14 @@ export function Home() {
               ) : (
                 <div className="justify-center text-2xl font-bold">Loading...</div>
                 )} */}
+                </div>
+                <div className="mt-5 w-full justify-center">
+                  <Pagination
+                    className="w-full justify-center"
+                    currentPage={movieData?.meta?.currentPage}
+                    totalPages={movieData?.meta?.totalPages}
+                    onPageChange={(page) => handlePageSize(page)}
+                  />
                 </div>
               </>
             ) : (

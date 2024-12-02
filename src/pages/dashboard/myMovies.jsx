@@ -1,5 +1,6 @@
 import { useAxiosDelete } from "@/hooks/DeleteAxios";
 import { GetUser } from "@/utils/LocalStorage";
+import { Pagination } from "flowbite-react";
 import { debounce } from "lodash";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -44,6 +45,13 @@ export function MyMovies() {
         id,
       });
     }
+  };
+
+  const handlePageSize = (data) => {
+    setMoviesQuery((prev) => ({
+      ...prev,
+      page: data,
+    }));
   };
 
   useEffect(() => {
@@ -173,6 +181,12 @@ export function MyMovies() {
                 <div className="justify-center text-2xl font-bold">Loading...</div>
                 )} */}
                 </div>
+                <Pagination
+                  className="w-full justify-center"
+                  currentPage={movieData?.meta?.currentPage}
+                  totalPages={movieData?.meta?.totalPages}
+                  onPageChange={(page) => handlePageSize(page)}
+                />
               </>
             ) : (
               <div className="flex w-full items-center justify-center">
