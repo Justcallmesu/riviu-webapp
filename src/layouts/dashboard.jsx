@@ -16,7 +16,7 @@ export function Dashboard() {
     if (GetUser()) {
       getMe().catch(() => {
         removeUser();
-        navigate(0);
+        window.location.reload();
       });
     }
   }, []);

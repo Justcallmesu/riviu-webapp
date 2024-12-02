@@ -29,7 +29,7 @@ export function SignIn() {
         SetUser(res);
       }
       alert("Login Berhasil");
-      navigate(0);
+      window.location.reload();
     } catch (error) {
       console.log(error);
       alert("Login Gagal");

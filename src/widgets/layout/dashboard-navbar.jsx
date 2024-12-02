@@ -34,7 +34,7 @@ export function DashboardNavbar() {
   const handleLogout = async () => {
     await logout();
 
-    navigate(0);
+    window.location.reload();
   };
 
   return (
