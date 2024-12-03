@@ -75,7 +75,7 @@ export function Home() {
                           <div className="">
                             <img
                               className="rounded-t-lg object-cover transition hover:scale-110 "
-                              src={`https://riviu-server-production.up.railway.app/api/v1/api/v1/files/${movie.image}`}
+                              src={`https://riviu-server-production.up.railway.app/api/v1/files/${movie.image}`}
                             />
                           </div>
                           <div className="px-5 py-8">

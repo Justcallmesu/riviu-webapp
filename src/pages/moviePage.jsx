@@ -65,7 +65,7 @@ function MoviePage() {
       <div className="md:grid md:grid-cols-3 md:gap-5">
         <div className="pl-5 pt-5 ">
           <img
-            src={`https://riviu-server-production.up.railway.app/api/v1/api/v1/files/${movieData?.data?.image}`}
+            src={`https://riviu-server-production.up.railway.app/api/v1/files/${movieData?.data?.image}`}
             className="rounded-lg object-cover md:h-96 md:w-72"
           />
         </div>
