@@ -9,6 +9,11 @@ export function checkLikedMovies(id) {
 
   if (!likedMoviesList) return false;
 
+  if (!!GetUser())
+    return !!likedMoviesList.find(
+      (item) => item === id && item.userId === GetUser().id
+    );
+
   return !!likedMoviesList.find((item) => item === id);
 }
 
@@ -26,7 +31,11 @@ export function dislikedLikedMovies(id) {
 
 export function SetLikedMovies(id) {
   const likedMoviesList = JSON.parse(localStorage.getItem("likedMovies")) ?? [];
-
+  if (!!GetUser())
+    return localStorage.setItem(
+      "likedMovies",
+      JSON.stringify([...likedMoviesList, { id, userId: GetUser().id }])
+    );
   localStorage.setItem("likedMovies", JSON.stringify([...likedMoviesList, id]));
 }
 
