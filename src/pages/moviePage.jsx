@@ -37,7 +37,7 @@ function MoviePage() {
       let link = movieData?.data?.youtubeLink?.split("?v=")[1];
 
       if (!link)
-        link = movieData?.data?.youtubeLink.split("/")[3].split("?")[0];
+        link = movieData?.data?.youtubeLink?.split("/")[3]?.split("?")[0];
 
       setmovieYoutubeLink(link);
     }
@@ -49,7 +49,6 @@ function MoviePage() {
     } else {
       SetLikedMovies(id);
     }
-    console.log("running");
 
     await mutateLikeMovieReview({
       id: id,
